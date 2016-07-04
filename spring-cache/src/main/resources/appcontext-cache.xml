@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	
+	
+	<bean id="cacheManager"
+      class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache"/>
+
+	<!-- EhCache library setup -->
+	<bean id="ehcache"
+	      class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:config-location="classpath:/ehcache/ehcache.xml"/>
+	      
+	      
+	<!-- cache definitions -->
+	<cache:advice id="cacheAdvice" cache-manager="cacheManager">
+	    <cache:caching cache="cluster-students">
+	        <cache:cacheable method="getStudents"/>
+	       <!--  <cache:cache-evict method="removeAll" all-entries="true"/> -->
+	    </cache:caching>
+	</cache:advice>
+	
+	<!-- apply the cacheable behavior to all BookService interfaces -->
+	<aop:config>
+	    <aop:advisor advice-ref="cacheAdvice" 
+	    pointcut="execution(* com.mcnc.mybatis.service.impl.StudentServiceImpl.*(..))"/>
+	</aop:config>
+	
+    
+</beans>

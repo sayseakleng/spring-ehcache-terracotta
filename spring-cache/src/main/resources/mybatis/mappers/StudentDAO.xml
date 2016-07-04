@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd">
+<mapper namespace="com.mcnc.mybatis.dao.StudentDAO">
+	
+	<insert id="create">
+		INSERT INTO 
+			STUDENT 
+		VALUES(
+			#{id}, #{name}
+		)
+	</insert>
+
+	<select id="getStudents" resultType="StudentDTO" statementType="STATEMENT">
+		SELECT 
+			*
+		FROM 
+			STUDENT
+	</select>
+	
+	<select id="getStudentById" resultType="StudentDTO">
+		SELECT 
+			*
+		FROM 
+			STUDENT 
+		WHERE 
+			ID = #{id}
+	</select>
+	
+	<delete id="deleteById">
+		DELETE FROM 
+			STUDENT 
+		WHERE 
+			ID = #{id}
+	</delete>
+</mapper>
